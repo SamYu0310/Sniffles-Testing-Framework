@@ -36,10 +36,10 @@ class truvari:
         truvari_job1 = job_ids_command1[0]
         truvari_job2 = job_ids_command1[1]
 
-        # Third command
+        # Second command
         command2 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="truvari_collect_log.out" --error="truvari_collect_log.err" --dependency afterok:{truvari_job1}:{truvari_job2} truvari_collect4.sh'
 
-        # Execute the third command
+        # Execute the second command
         subprocess.run(command2, shell=True, capture_output=True, text=True)
 
         return 0
