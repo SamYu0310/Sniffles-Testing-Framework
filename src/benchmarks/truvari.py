@@ -34,7 +34,7 @@ class truvari:
         
         # Run scripts to run job to collect summaries of the truvari jobs and compare results - Command 2
         truvari_job1 = job_ids_command1[0]
-        truvari_job2 = job_ids_command1[1]
+        truvari_job2 = job_ids_command1[1] 
 
         # Second command
         command2 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="truvari_collect_log.out" --error="truvari_collect_log.err" --dependency afterok:{truvari_job1}:{truvari_job2} truvari_collect4.sh'
