@@ -2,8 +2,9 @@ import subprocess
 import re 
 
 class truvari: 
-    def __init__(self, version, benchmark_vcf, benchmark_bed, snfjob_ids, unique_id): 
-        self.version = version
+    def __init__(self, truv_type, version_path, benchmark_vcf, benchmark_bed, snfjob_ids, unique_id): 
+        self.truv_type = truv_type
+        self.version_path = version_path
         self.benchmark_vcf = benchmark_vcf
         self.benchmark_bed = benchmark_bed
         self.snfjob_ids = snfjob_ids
@@ -19,8 +20,8 @@ class truvari:
 
             # Second command
             command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}truvari_log.out" \
-            --error="{snf_version}truvari_log.err" --dependency afterok:{job_id} benchmark_job.sh {self.version} \
-            {self.benchmark_vcf} {self.benchmark_bed} {sniffles_output} truvari_{snf_version}'
+            --error="{snf_version}truvari_log.err" --dependency afterok:{job_id} benchmark_job.sh {self.version_path} \
+            {self.benchmark_vcf} {self.benchmark_bed} {sniffles_output} truvari{self.truv_type}_{snf_version}'
 
             # Execute the second command
             process1 = subprocess.run(command1, shell=True, capture_output=True, text=True)
@@ -42,7 +43,7 @@ class truvari:
         # Second command
         command2 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="truvari_collect_log.out" \
         --error="truvari_collect_log.err" --dependency afterok:{truvari_job1}:{truvari_job2} truvari_collect4.sh \
-        {self.unique_id}'
+        {self.truv_type} {self.unique_id}'
 
         # Execute the second command
         subprocess.run(command2, shell=True, capture_output=True, text=True)

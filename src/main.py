@@ -17,24 +17,25 @@ def main():
     # Check if the truvari benchmark needs to be tested 
     if len(json_data["truvari_versions"]) > 0: 
 
+        snfjob_ids = []
+
+        # Test the version of truvari on all the given test data sets
+        # First run all sniffles jobs first so those jobs can run concurrenlty 
+        for num in range(0, len(json_data["truvari_data"])): 
+            alignment = json_data["truvari_data"][num][0]
+            bench_vcf = json_data["truvari_data"][num][1]
+            bench_bed = json_data["truvari_data"][num][2]
+
+            # Run sniffles jobs 
+            _ = sniffles(alignment, json_data["current_snf"], json_data["new_snf"], num)
+            snfjob_ids.append(sniffles.run())
+
         # Make sure to test all the different truvari versions
-        for version in json_data["truvari_versions"]: 
-            snfjob_ids = []
-
-            # Test the version of truvari on all the given test data sets
-            # First run all sniffles jobs first so those jobs can run concurrenlty 
-            for num in range(0, len(json_data["truvari_data"])): 
-                alignment = json_data["truvari_data"][num][0]
-                bench_vcf = json_data["truvari_data"][num][1]
-                bench_bed = json_data["truvari_data"][num][2]
-
-                # Run sniffles jobs 
-                _ = sniffles(alignment, json_data["current_snf"], json_data["new_snf"], num)
-                snfjob_ids.append(sniffles.run())
+        for num2 in range(0, len(json_data["truvari_versions"])): 
 
             # Now run all truvari jobs and collect results to compare the snf versions' performances 
-            for ids in snfjob_ids: 
-                _ = truvari(version, bench_vcf, bench_bed, ids)
+            for num3 in range(0, len(snfjob_ids)): 
+                _ = truvari(num2, json_data["truvari_versions"][num2], bench_vcf, bench_bed, snfjob_ids[num3], num3)
                 truvari.run() 
 
     # Check if the mendelian benchmark needs to be tested 
