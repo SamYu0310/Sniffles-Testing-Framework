@@ -36,8 +36,8 @@ class sniffles:
         return job_ids_command1 
 
 class sniffles_trio(sniffles):
-    def __init__(self, current, new, alignment1, alignment2, alignment3): 
-        super().__init__(None, current, new) 
+    def __init__(self, current, new, unique_id, alignment1, alignment2, alignment3): 
+        super().__init__(None, current, new, unique_id) 
         self.alignment1 = alignment1
         self.alignment2 = alignment2
         self.alignment3 = alignment3 
@@ -48,13 +48,14 @@ class sniffles_trio(sniffles):
 
         # Run both versions of sniffles on the alignment trio 
         for number in range(0, 2): 
-            snf_version = "current_snf" if number == 0 else "new_snf"
+            snf_version = f"current_snf{self.unique_id}" if number == 0 else f"new_snf{self.unique_id}"
             snf_path = self.current if number == 0 else self.new
             job_ids = []
 
             # Run one of the versions on all three alignments 
             for num in range(0, 3):
-                person = "MOTHER" if num == 0 else "FATHER" if num == 1 else "PROBAND"
+                person = f"MOTHER{self.unique_id}" if num == 0 else f"FATHER{self.unique_id}" if num == 1 \
+                else f"PROBAND{self.unique_id}"
                 alignment = self.alignment1 if num == 0 else self.alignment2 if num == 1 else self.alignment3
 
                 # First command

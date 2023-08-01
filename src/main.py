@@ -21,37 +21,37 @@ def main():
 
         # Test the version of truvari on all the given test data sets
         # First run all sniffles jobs first so those jobs can run concurrenlty 
-        for num in range(0, len(json_data["truvari_data"])): 
-            alignment = json_data["truvari_data"][num][0]
-            bench_vcf = json_data["truvari_data"][num][1]
-            bench_bed = json_data["truvari_data"][num][2]
+        for data_set in range(0, len(json_data["truvari_data"])): 
+            alignment = json_data["truvari_data"][data_set][0]
+            bench_vcf = json_data["truvari_data"][data_set][1]
+            bench_bed = json_data["truvari_data"][data_set][2]
 
             # Run sniffles jobs 
-            _ = sniffles(alignment, json_data["current_snf"], json_data["new_snf"], num)
+            _ = sniffles(alignment, json_data["current_snf"], json_data["new_snf"], data_set)
             snfjob_ids.append(sniffles.run())
 
         # Make sure to test all the different truvari versions
-        for num2 in range(0, len(json_data["truvari_versions"])): 
+        for truv_type in range(0, len(json_data["truvari_versions"])): 
 
             # Now run all truvari jobs and collect results to compare the snf versions' performances 
-            for num3 in range(0, len(snfjob_ids)): 
-                _ = truvari(num2, json_data["truvari_versions"][num2], bench_vcf, bench_bed, snfjob_ids[num3], num3)
+            for id in range(0, len(snfjob_ids)): 
+                _ = truvari(truv_type, json_data["truvari_versions"][truv_type], bench_vcf, bench_bed, snfjob_ids[id], id)
                 truvari.run() 
 
     # Check if the mendelian benchmark needs to be tested 
     if len(json_data["mendelian_data"]) > 0: 
+        mendelian_snf_ids = []
 
         # Make sure to test mendelian on all the given test data sets 
-        for data_set in json_data["mendelian_data"]:
-            alignment1 = data_set[0]
-            alignment2 = data_set[1]
-            alignment3 = data_set[2]
+        for data_set in range(0, len(json_data["mendelian_data"])):
+            alignment1 = json_data["mendelian_data"][data_set][0]
+            alignment2 = json_data["mendelian_data"][data_set][1]
+            alignment3 = json_data["mendelian_data"][data_set][2]
 
             # Run both verisons of sniffles on the given data set
-            _ = sniffles_trio(json_data["current_snf"], json_data["new_snf"], alignment1, alignment2, alignment3)
+            _ = sniffles_trio(json_data["current_snf"], json_data["new_snf"], data_set, alignment1, alignment2, alignment3)
             job_ids = sniffles_trio.run()
-            current_snf_ids = job_ids[0]
-            new_snf_ids = job_ids[1]
+            mendelian_snf_ids.append(job_ids)
             
             # Run mendelian jobs with correct respective snf job dependencies 
             
