@@ -8,4 +8,5 @@ class mendelian:
         self.snf3 = snf3 
     
     def run(): 
+
         return 0

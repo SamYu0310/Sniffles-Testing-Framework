@@ -23,13 +23,13 @@ def main():
 
             # Test the version of truvari on all the given test data sets
             # First run all sniffles jobs first so those jobs can run concurrenlty 
-            for data_set in json_data["truvari_data"]: 
-                alignment = data_set[0]
-                bench_vcf = data_set[1]
-                bench_bed = data_set[2]
+            for num in range(0, len(json_data["truvari_data"])): 
+                alignment = json_data["truvari_data"][num][0]
+                bench_vcf = json_data["truvari_data"][num][1]
+                bench_bed = json_data["truvari_data"][num][2]
 
                 # Run sniffles jobs 
-                _ = sniffles(alignment, json_data["current_snf"], json_data["new_snf"])
+                _ = sniffles(alignment, json_data["current_snf"], json_data["new_snf"], num)
                 snfjob_ids.append(sniffles.run())
 
             # Now run all truvari jobs and collect results to compare the snf versions' performances 
@@ -46,7 +46,7 @@ def main():
             alignment2 = data_set[1]
             alignment3 = data_set[2]
 
-            # Run both verisons of sniffles on the given alignment triplet 
+            # Run both verisons of sniffles on the given data set
             _ = sniffles_trio(json_data["current_snf"], json_data["new_snf"], alignment1, alignment2, alignment3)
             job_ids = sniffles_trio.run()
             current_snf_ids = job_ids[0]

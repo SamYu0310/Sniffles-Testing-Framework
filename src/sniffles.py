@@ -2,20 +2,23 @@ import subprocess
 import re 
 
 class sniffles: 
-    def __init__(self, alignment, current, new): 
+    def __init__(self, alignment, current, new, unique_id): 
         self.alignment = alignment
         self.current = current 
         self.new = new
+        self.unique_id = unique_id
     
     def run(self): 
          # Run scripts to run both versions of sniffles being tested - Command 1
         job_ids_command1 = []  # To store the job IDs for command1
         for num in range(0, 2):
-            snf_version = "current_snf" if num == 0 else "new_snf"
+            snf_version = f"current_snf_{self.unique_id}" if num == 0 else f"new_snf_{self.unique_id}"
             snf_path = self.current if num == 0 else self.new
 
             # First command
-            command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}_log.out" --error="{snf_version}_log.err" sniffles220_01hg.sh {snf_path} {self.alignment} {snf_version}output'
+            command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}_log.out" \
+            --error="{snf_version}_log.err" sniffles220_01hg.sh {snf_path} {self.alignment} \
+            {snf_version}output'
 
             # Execute the first command
             process1 = subprocess.run(command1, shell=True, capture_output=True, text=True)
