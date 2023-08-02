@@ -48,7 +48,7 @@ class sniffles_trio(sniffles):
 
         # Run both versions of sniffles on the alignment trio 
         for number in range(0, 2): 
-            snf_version = f"current_snf{self.unique_id}" if number == 0 else f"new_snf{self.unique_id}"
+            snf_version = "current_snf" if number == 0 else "new_snf"
             snf_path = self.current if number == 0 else self.new
             job_ids = []
 
