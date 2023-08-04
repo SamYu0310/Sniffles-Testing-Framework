@@ -72,7 +72,43 @@ class mendelian:
             output = completed_process.stdout
 
             # Write the output to a file
-            with open(f'mendelian{self.unique_id}_output.txt', 'w') as output_file:
+            with open(f'{snf_version}_mendelian{self.unique_id}_output.txt', 'w') as output_file:
                 output_file.write(output)
+            
+        # Stores files containing the output of the bcftools view command on the merged files 
+        bcftool_views = [f'current_snf_mendelian{self.unique_id}_output.txt', f'new_snf_mendelian{self.unique_id}_output.txt']
+
+        # To store important statistics from above files 
+        stats_lists = []
+
+        # Read through the files and store important statistics from each 
+        for view in bcftool_views: 
+            with open(view, 'r') as file:
+                lines = file.readlines()
+            stats = {}
+            for line in lines:
+                line = line.strip().split()
+                if len(line) >= 2 and line[0] in ['ngood', 'nmerr', 'nmissing', 'nfail']:
+                    stats[line[0]] = int(line[1])
+            stats_lists.append(stats)
+
+        stats1 = stats_lists[0]
+        stats2 = stats_lists[1]
+
+        # Compare statistics and store the differences between versions into a comparison text file 
+        with open(f"mendelian{self.unique_id}_comparison.txt", 'w') as file:
+            for stat_name in ['ngood', 'nmerr', 'nmissing', 'nfail']:
+                diff = stats2[stat_name] - stats1[stat_name]
+                if stat_name == 'ngood': 
+                    if diff > 0: 
+                        comparison = f"+{diff}, new_snf"
+                    else: 
+                        comparison = f"+{diff*(-1)}, current_snf"
+                else: 
+                    if diff > 0: 
+                        comparison = f"-{diff}, current_snf"
+                    else: 
+                        comparison = f"{diff}, new_snf"
+                file.write(f"{stat_name}: {comparison}\n")
 
         return 0
