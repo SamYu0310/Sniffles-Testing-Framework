@@ -3,6 +3,7 @@ import json
 from sniffles import sniffles 
 from sniffles import sniffles_trio
 from benchmarks.truvari import truvari 
+from benchmarks.mendelian import mendelian 
 
 def main(): 
     # Check number of given arguments (should be one JSON file) 
@@ -27,16 +28,16 @@ def main():
             bench_bed = json_data["truvari_data"][data_set][2]
 
             # Run sniffles jobs 
-            _ = sniffles(alignment, json_data["current_snf"], json_data["new_snf"], data_set)
-            snfjob_ids.append(sniffles.run())
+            snf_job = sniffles(alignment, json_data["current_snf"], json_data["new_snf"], data_set)
+            snfjob_ids.append(snf_job.run())
 
         # Make sure to test all the different truvari versions
         for truv_type in range(0, len(json_data["truvari_versions"])): 
 
             # Now run all truvari jobs and collect results to compare the snf versions' performances 
             for id in range(0, len(snfjob_ids)): 
-                _ = truvari(truv_type, json_data["truvari_versions"][truv_type], bench_vcf, bench_bed, snfjob_ids[id], id)
-                truvari.run() 
+                truvari_job = truvari(truv_type, json_data["truvari_versions"][truv_type], bench_vcf, bench_bed, snfjob_ids[id], id)
+                truvari_job.run() 
 
     # Check if the mendelian benchmark needs to be tested 
     if len(json_data["mendelian_data"]) > 0: 
@@ -49,12 +50,15 @@ def main():
             alignment3 = json_data["mendelian_data"][data_set][2]
 
             # Run both verisons of sniffles on the given data set
-            _ = sniffles_trio(json_data["current_snf"], json_data["new_snf"], data_set, alignment1, alignment2, alignment3)
-            job_ids = sniffles_trio.run()
+            mendelian_sniffles = sniffles_trio(json_data["current_snf"], json_data["new_snf"], data_set, alignment1, alignment2, alignment3)
+            job_ids = mendelian_sniffles.run()
             mendelian_snf_ids.append(job_ids)
             
-            # Run mendelian jobs with correct respective snf job dependencies 
-            
+        # Run mendelian jobs with correct respective snf job dependencies 
+        for id_trio in range(0, len(mendelian_snf_ids)): 
+            mendelian_job = mendelian(json_data["bcftools_plugin"], json_data["current_snf"], \
+                          json_data["new_snf"], id_trio, mendelian_snf_ids[id_trio])
+            mendelian_job.run()
 
     return 0
 
