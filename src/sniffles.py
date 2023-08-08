@@ -78,3 +78,24 @@ class sniffles_trio(sniffles):
             job_id_lists.append(job_ids)    #add list of ids for one version to overall list 
             
         return job_id_lists 
+
+class sniffles_extra(sniffles): 
+    def __init__(self, alignment, current, new, unique_id, extra_param): 
+        super().__init__(alignment, current, new, unique_id) 
+        self.extra_param = extra_param
+    
+    def run(self): 
+         # Run scripts to run both versions of sniffles being tested - Command 1
+        for num in range(0, 2):
+            snf_version = f"current_snf{self.unique_id}" if num == 0 else f"new_snf{self.unique_id}"
+            snf_path = self.current if num == 0 else self.new
+
+            # First command
+            command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}_log.out" \
+            --error="{snf_version}_log.err" sniffles220_01hg.sh {snf_path} {self.alignment} \
+            {snf_version}_extra_output {self.extra_param}'
+
+            # Execute the first command
+            subprocess.run(command1, shell=True, capture_output=True, text=True)
+        
+        return 0

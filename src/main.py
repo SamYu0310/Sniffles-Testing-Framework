@@ -2,6 +2,7 @@ import sys
 import json 
 from sniffles import sniffles 
 from sniffles import sniffles_trio
+from sniffles import sniffles_extra
 from benchmarks.truvari import truvari 
 from benchmarks.mendelian import mendelian 
 
@@ -24,8 +25,6 @@ def main():
         # First run all sniffles jobs first so those jobs can run concurrenlty 
         for data_set in range(0, len(json_data["truvari_data"])): 
             alignment = json_data["truvari_data"][data_set][0]
-            bench_vcf = json_data["truvari_data"][data_set][1]
-            bench_bed = json_data["truvari_data"][data_set][2]
 
             # Run sniffles jobs 
             snf_job = sniffles(alignment, json_data["current_snf"], json_data["new_snf"], data_set)
@@ -36,6 +35,9 @@ def main():
 
             # Now run all truvari jobs and collect results to compare the snf versions' performances 
             for id in range(0, len(snfjob_ids)): 
+                bench_vcf = json_data["truvari_data"][id][1]
+                bench_bed = json_data["truvari_data"][id][2]
+
                 truvari_job = truvari(truv_type, json_data["truvari_versions"][truv_type], bench_vcf, bench_bed, snfjob_ids[id], id)
                 truvari_job.run() 
 
@@ -59,6 +61,16 @@ def main():
             mendelian_job = mendelian(json_data["bcftools_plugin"], json_data["current_snf"], \
                           json_data["new_snf"], id_trio, mendelian_snf_ids[id_trio])
             mendelian_job.run()
+
+    # Check if sniffles needs to be tested with extra parameters 
+    if len(json_data["extra_param"]) != "": 
+
+        # Run sniffles jobs with extra parameters on the alignment data provided 
+        for data_set in range(0, len(json_data["truvari_data"])): 
+            alignment = json_data["truvari_data"][data_set][0]
+            
+            snf_extra_job = sniffles_extra(alignment, json_data["current_snf"], json_data["new_snf"], data_set, json_data["extra_param"])
+            snf_extra_job.run()
 
     return 0
 
