@@ -19,9 +19,9 @@ class truvari:
             job_id = self.snfjob_ids[num]
 
             # Second command
-            command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}truvari_log.out" \
-            --error="{snf_version}truvari_log.err" --dependency afterok:{job_id} truvari.sh {self.version_path} \
-            {self.benchmark_vcf} {self.benchmark_bed} {sniffles_output} truvari{self.truv_type}_{snf_version}'
+            command1 = f'sbatch --output="{snf_version}truvari_log.out" --error="{snf_version}truvari_log.err" \
+            --dependency afterok:{job_id} truvari.sh {self.version_path} {self.benchmark_vcf} {self.benchmark_bed} \
+            {sniffles_output} truvari{self.truv_type}_{snf_version}'
 
             # Execute the second command
             process1 = subprocess.run(command1, shell=True, capture_output=True, text=True)
@@ -41,9 +41,8 @@ class truvari:
         truvari_job2 = job_ids_command1[1] 
 
         # Second command
-        command2 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="truvari_collect_log.out" \
-        --error="truvari_collect_log.err" --dependency afterok:{truvari_job1}:{truvari_job2} truvari_collect.sh \
-        {self.truv_type} {self.unique_id}'
+        command2 = f'sbatch --output="truvari_collect_log.out" --error="truvari_collect_log.err" \
+        --dependency afterok:{truvari_job1}:{truvari_job2} truvari_collect.sh {self.truv_type} {self.unique_id}'
 
         # Execute the second command
         subprocess.run(command2, shell=True, capture_output=True, text=True)

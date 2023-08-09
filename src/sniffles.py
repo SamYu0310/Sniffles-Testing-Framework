@@ -16,7 +16,7 @@ class sniffles:
             snf_path = self.current if num == 0 else self.new
 
             # First command
-            command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}_log.out" \
+            command1 = f'sbatch --output="{snf_version}_log.out" \
             --error="{snf_version}_log.err" sniffles.sh {snf_path} {self.alignment} \
             {snf_version}output'
 
@@ -59,7 +59,7 @@ class sniffles_trio(sniffles):
                 alignment = self.alignment1 if num == 0 else self.alignment2 if num == 1 else self.alignment3
 
                 # First command
-                command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}_{person}_log.out" \
+                command1 = f'sbatch --output="{snf_version}_{person}_log.out" \
                 --error="{snf_version}_{person}_log.err" sniffles.sh {snf_path} {alignment} \
                 {snf_version}_{person}output'
 
@@ -91,7 +91,7 @@ class sniffles_extra(sniffles):
             snf_path = self.current if num == 0 else self.new
 
             # First command
-            command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}_log.out" \
+            command1 = f'sbatch --output="{snf_version}_log.out" \
             --error="{snf_version}_log.err" sniffles.sh {snf_path} {self.alignment} \
             {snf_version}_extra_output {self.extra_param}'
 
