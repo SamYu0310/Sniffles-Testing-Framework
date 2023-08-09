@@ -1,5 +1,6 @@
 import sys 
 import json 
+import os
 from sniffles import sniffles 
 from sniffles import sniffles_trio
 from sniffles import sniffles_extra
@@ -15,6 +16,9 @@ def main():
     # Read contents of input JSON file with all the paths 
     with open(sys.argv[1], 'r') as file:
         json_data = json.load(file)
+
+    # Set the working directory 
+    os.chdir(json_data["directory"])
 
     # Check if the truvari benchmark needs to be tested 
     if len(json_data["truvari_versions"]) > 0: 
