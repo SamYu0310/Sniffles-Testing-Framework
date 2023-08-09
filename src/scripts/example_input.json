@@ -1,0 +1,10 @@
+{
+    "directory": "",
+    "bcftools_plugin": "",
+    "current_snf": "",
+    "new_snf": "",
+    "truvari_versions": "",
+    "truvari_data": [["alignment", "bench_vcf", "bench_bed"]],
+    "mendelian_data": [["alignment1", "alignment2", "alignment3"]],
+    "extra_param": ""
+}
