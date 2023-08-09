@@ -32,7 +32,7 @@ class mendelian:
             # First command
             command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}_merge_log.out" \
             --error="{snf_version}_merge_log.err" --dependency afterok:{job_ids[0]}:{job_ids[1]}:{job_ids[2]} \
-            snf_merge.sh {snf_path} merge_input.tsv {snf_version}merge{self.unique_id}_output'
+            sniffles_merge.sh {snf_path} merge_input.tsv {snf_version}merge{self.unique_id}_output'
 
             # Execute the first command
             process1 = subprocess.run(command1, shell=True, capture_output=True, text=True)

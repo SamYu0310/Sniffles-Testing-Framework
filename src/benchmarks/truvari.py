@@ -20,7 +20,7 @@ class truvari:
 
             # Second command
             command1 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="{snf_version}truvari_log.out" \
-            --error="{snf_version}truvari_log.err" --dependency afterok:{job_id} benchmark_job.sh {self.version_path} \
+            --error="{snf_version}truvari_log.err" --dependency afterok:{job_id} truvari.sh {self.version_path} \
             {self.benchmark_vcf} {self.benchmark_bed} {sniffles_output} truvari{self.truv_type}_{snf_version}'
 
             # Execute the second command
@@ -42,7 +42,7 @@ class truvari:
 
         # Second command
         command2 = f'sbatch --chdir="/users/u251429/myscratch/mytests" --output="truvari_collect_log.out" \
-        --error="truvari_collect_log.err" --dependency afterok:{truvari_job1}:{truvari_job2} truvari_collect4.sh \
+        --error="truvari_collect_log.err" --dependency afterok:{truvari_job1}:{truvari_job2} truvari_collect.sh \
         {self.truv_type} {self.unique_id}'
 
         # Execute the second command
