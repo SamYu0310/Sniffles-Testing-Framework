@@ -20,7 +20,7 @@ class truvari:
 
             # Second command
             command1 = f'sbatch --output="{snf_version}truvari_log.out" --error="{snf_version}truvari_log.err" \
-            --dependency afterok:{job_id} truvari.sh {self.version_path} {self.benchmark_vcf} {self.benchmark_bed} \
+            --dependency afterok:{job_id} scripts/truvari.sh {self.version_path} {self.benchmark_vcf} {self.benchmark_bed} \
             {sniffles_output} truvari{self.truv_type}_{snf_version}'
 
             # Execute the second command
@@ -42,7 +42,7 @@ class truvari:
 
         # Second command
         command2 = f'sbatch --output="truvari_collect_log.out" --error="truvari_collect_log.err" \
-        --dependency afterok:{truvari_job1}:{truvari_job2} truvari_collect.sh {self.truv_type} {self.unique_id}'
+        --dependency afterok:{truvari_job1}:{truvari_job2} scripts/truvari_collect.sh {self.truv_type} {self.unique_id}'
 
         # Execute the second command
         subprocess.run(command2, shell=True, capture_output=True, text=True)

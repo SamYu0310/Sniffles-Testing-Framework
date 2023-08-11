@@ -17,7 +17,7 @@ class sniffles:
 
             # First command
             command1 = f'sbatch --output="{snf_version}_log.out" \
-            --error="{snf_version}_log.err" sniffles.sh {snf_path} {self.alignment} \
+            --error="{snf_version}_log.err" scripts/sniffles.sh {snf_path} {self.alignment} \
             {snf_version}output'
 
             # Execute the first command
@@ -60,7 +60,7 @@ class sniffles_trio(sniffles):
 
                 # First command
                 command1 = f'sbatch --output="{snf_version}_{person}_log.out" \
-                --error="{snf_version}_{person}_log.err" sniffles.sh {snf_path} {alignment} \
+                --error="{snf_version}_{person}_log.err" scripts/sniffles.sh {snf_path} {alignment} \
                 {snf_version}_{person}output'
 
                 # Execute the first command
@@ -92,7 +92,7 @@ class sniffles_extra(sniffles):
 
             # First command
             command1 = f'sbatch --output="{snf_version}_log.out" \
-            --error="{snf_version}_log.err" sniffles.sh {snf_path} {self.alignment} \
+            --error="{snf_version}_log.err" scripts/sniffles.sh {snf_path} {self.alignment} \
             {snf_version}_extra_output {self.extra_param}'
 
             # Execute the first command
