@@ -52,8 +52,8 @@ def main():
         # Make sure to test mendelian on all the given test data sets 
         for data_set in range(0, len(json_data["mendelian_data"])):
             alignment1 = json_data["mendelian_data"][data_set][0]
-            alignment2 = json_data["mendelian_data"][id_trio][1]
-            alignment3 = json_data["mendelian_data"][id_trio][2]
+            alignment2 = json_data["mendelian_data"][data_set][1]
+            alignment3 = json_data["mendelian_data"][data_set][2]
 
             # Run both verisons of sniffles on the given data set
             mendelian_sniffles = sniffles_trio(json_data["current_snf"], json_data["new_snf"], data_set, alignment1, alignment2, alignment3)
